@@ -41,6 +41,10 @@ classi <- knn(train = pop_train_scale,test = pop_test_scale, cl=train_800$popula
 miss_class <- mean(classi != test_100$popularity)
 print(paste('Accuracy=',1-miss_class))
 
+## predykcja gatunkow
+#TODO:
+#Polaczyc konkretne gatunki w jedne
+
 own_data <- data.frame()
 
 for(i in c(1:length(x))){
