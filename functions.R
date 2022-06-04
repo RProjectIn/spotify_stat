@@ -12,6 +12,7 @@ get_playlist_top_50_spotify <- function(countries){
   all_playlists <- list()
   
   for(country in countries){
+    print(country)
     phrase = sprintf("Top 50 - %s",country)
     playlist = search_spotify(phrase, type ="playlist", limit = 10)
     playlist = playlist[playlist$owner.display_name == "Spotify",]
@@ -84,7 +85,8 @@ get_spotify_charts_data <- function(
                                   "/html/body/div/div/div/div/span/table")
   spotify_table <- html_table(read_html(link))
   spotify_df <- as.data.frame(spotify_table)
-  spotify_df <- spotify_df[c(2,4,5)]
+  print(spotify_df[c(2,4,5)])
+  spotify_df <- spotify_df[c(2,4,5),]
   
   #Odzielenie artystow od tytulow piosenek
   title <- c()

@@ -1,5 +1,2 @@
-*.csv
 tokens.R
 .Rproj.user
-.RData
-.Rhistory
