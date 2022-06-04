@@ -12,12 +12,15 @@ library(stringi)
 #TODO:
 #Polaczyc konkretne gatunki w jedne
 
+genre <- c(read.csv("genre.csv")$hip.hop,"hip hop")
+
 own_data <- data.frame()
 
-for(i in c(1:length(top_50_countries))){
-  own_data <- rbind(own_data,top_50_countries[[i]])
+for(i in c(1:length(top_spotify_list))){
+  own_data <- rbind(own_data,top_spotify_list[[i]])
 }
 
+own_data$artist_genres <- genre
 knn_own_data <- own_data[c(2,7,8,c(10:15))]
 
 
