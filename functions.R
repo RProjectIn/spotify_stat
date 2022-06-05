@@ -7,10 +7,11 @@ source("tokens.R")
 # funkcja zwracajaca dane z playlist
 get_playlist_top_50_spotify <- function(countries){
   
+  #tworzenie pustych struktur do zbierania id playlist oraz zawartosci playlist
   playlists_ids <- c()
-  
   all_playlists <- list()
   
+  #wyszukiwanie id playlist po spotify api
   for(country in countries){
     print(country)
     phrase = sprintf("Top 50 - %s",country)
@@ -20,7 +21,7 @@ get_playlist_top_50_spotify <- function(countries){
     playlists_ids <- append(playlists_ids, playlist$id)
   }
   
-  
+  #zapętlenie po id
   for(id in playlists_ids){
     tracks <- get_playlist(id)$tracks$items
     tracks_artist <- tracks$track.artist
@@ -28,12 +29,16 @@ get_playlist_top_50_spotify <- function(countries){
     artist <- c()
     artist_id <- c()
     
+    #wybieranie nazw artystow oraz ich id
     for(artist_data in tracks_artist){
       artist <- append(artist, artist_data$name[1])
       artist_id <- append(artist_id, artist_data$id[1])
     }
     
+    
     artist_genres <- c()
+    
+    #wybieranie gatunkow artystow
     for(id in artist_id){
       if(!is.list(get_artist(id)$genres[1])){
         artist_genres <- append(artist_genres,get_artist(id)$genres[1])
@@ -44,7 +49,7 @@ get_playlist_top_50_spotify <- function(countries){
     }
     
     audio_features <- data.frame()
-    
+    #zbieranie zmiennych okreslajacych piosenki
     for(id in tracks$track.id){
       audio = get_track_audio_features(id)[c(1,2,3,4,6,7,9,10,11)]
       audio_features <- rbind(audio_features,audio)
@@ -52,6 +57,7 @@ get_playlist_top_50_spotify <- function(countries){
     
     artist_genres <- unlist(artist_genres)
     
+    #budowanie ramki
     topsongs <- data.frame(
       artist,
       artist_genres,
@@ -63,15 +69,16 @@ get_playlist_top_50_spotify <- function(countries){
     topsongs <- cbind(topsongs,audio_features)
     topsongs <- unique(topsongs)
     
+    #dodawanie do listy playlist
     all_playlists <- append(all_playlists, list(topsongs))
     
   }
-  
+  #zwracanie listy playlist
   return(all_playlists)
   
 }
 
-# funkcja zwracajaca dane z chartow
+# funkcja zwracajaca dane z chartow !juz nie dziala
 get_spotify_charts_data <- function(
     region = c("global","pl","de","ua","us","sk"), 
     timestamp = c("daily", "weekly"),
@@ -106,7 +113,7 @@ get_spotify_charts_data <- function(
   data.frame(title, artist, streams)
 }
 
-# funkcja zwracajaca dane top artystow (dziala tylko pl)
+# funkcja zwracajaca dane top artystow !juz nie dziala
 artist_data <- function(region, from_date, to_date){
   y_weeks <- seq(as.Date(from_date), as.Date(to_date), by="weeks")
   
@@ -141,7 +148,7 @@ artist_data <- function(region, from_date, to_date){
   
 }
 
-# funkcja zwracajaca dane top artystow z kraju sprawdzanego (dziala tylko pl)
+# funkcja zwracajaca dane top artystow z kraju sprawdzanego !juz nie dziala
 regional_artist_data <- function(region,language){
   genres_df <- artist_data(region)
   
